@@ -12,4 +12,17 @@ public class User {
 	private Date date;
 	private int score;
 	private int hp;
+	
+	private User(String username, String password) {
+		this.username = username;
+		this.password = password;
+	}
+	
+	public User register(String username, String password) throws UsernameAlreadyExistsException {
+		for (String key : credentials.keySet()) {
+			if (key.equals(username)) throw new UsernameAlreadyExistsException("ERR: this username is taken, please try another.");
+		}
+		
+		return new User(username, password);
+	}
 }
