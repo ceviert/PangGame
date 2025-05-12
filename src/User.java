@@ -20,11 +20,13 @@ public class User {
 		return password;
 	}
 	
-	public User register(String username, String password) throws UsernameAlreadyExistsException {
+	public User register(String username, String password) throws UsernameAlreadyExistsException, InvalidPasswordException {
 		for (User user: users){
 			if (user.username.equals(username)) throw new UsernameAlreadyExistsException("ERR: this username is taken, please try another.");
 		}
 		
-		return new User(username, password);
+		if (!CredentialsManager.isPasswordValid(password)) throw new InvalidPasswordException("ERR: Invalid password.");
+		
+		return new User(username, CredentialsManager.hash(password));
 	}
 }
