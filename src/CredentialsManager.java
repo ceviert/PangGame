@@ -10,18 +10,20 @@ import java.util.Scanner;
 
 public abstract class CredentialsManager {
 
-	public final static String credentialsPath = "data\\usercredentials.txt";
+	private final static String CREDENTIALS_PATH = "data\\usercredentials.txt";
+	private final static String SPLITTER = " ";
+	
 	
 	public static List<User> loadCredentials() throws FileNotFoundException {
 		List<User> users = new ArrayList<>();
 		
-		File file = new File(credentialsPath);
+		File file = new File(CREDENTIALS_PATH);
 		if (!file.exists()) throw new FileNotFoundException("ERR: file does not exist or invalid file path.");
 		Scanner fileScanner = new Scanner(file);
 		
 		while (fileScanner.hasNextLine()) {
 			
-			String[] parts = parseCredentials(fileScanner.nextLine());
+			String[] parts = fileScanner.nextLine().split(SPLITTER);
 			
 			User user = new User(parts[0], parts[1]);
 			users.add(user);
@@ -29,11 +31,6 @@ public abstract class CredentialsManager {
 		
 		fileScanner.close();
 		return users;
-	}
-
-	private static String[] parseCredentials(String line) {
-		String[] lineArray = line.split(" ");
-		return lineArray;
 	}
 	
 	public static boolean isPasswordValid(String password) {
@@ -43,7 +40,7 @@ public abstract class CredentialsManager {
 	
 	public static void saveCredentials() {
 		try {
-			FileWriter writer = new FileWriter(credentialsPath);
+			FileWriter writer = new FileWriter(CREDENTIALS_PATH);
 			
 			for (User user : User.users) {
 				writer.write(user.getUsername() + " " + user.getPassword() + "\n");

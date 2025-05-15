@@ -1,16 +1,14 @@
 public class Record {
 
-	private User user;
 	private Date date;
 	private int highScore, time;
-	
-	public Record(User user, Date date, int score, int time) {
-		this.user = user;
+
+	public Record(User user, Date date, int highScore, int time) {
 		this.date = date;
-		this.score = score;
+		this.highScore = highScore;
 		this.time = time;
 	}
-	
+
 	public String toString
-	
+
 }
