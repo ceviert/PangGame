@@ -23,18 +23,23 @@ public class User {
 
 	public static void register(String username, char[] password)
 			throws UsernameAlreadyExistsException, InvalidPasswordException {
-		for (User user : users) {
-			if (user.username.equals(username))
-				throw new UsernameAlreadyExistsException("ERR: this username is taken, please try another.");
+		try {
+			for (User user : users) {
+				if (user.username.equals(username))
+					throw new UsernameAlreadyExistsException("ERR: this username is taken, please try another.");
+			}
+			
+			if (!CredentialsManager.isPasswordValid(password)) throw new InvalidPasswordException("ERR: Invalid password.");
+
+			users.add(new User(username, CredentialsManager.hash(password)));
+			CredentialsManager.saveCredentials();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
 		}
-
-		if (!CredentialsManager.isPasswordValid(password))
-			throw new InvalidPasswordException("ERR: Invalid password.");
-
-		users.add(new User(username, CredentialsManager.hash(password)));
 	}
 	
-	public static void login(String username, char[] password) throws InvalidUsernameException, InvalidPasswordException{
+	public static void login(String username, char[] password) throws NullPointerException, InvalidUsernameException, InvalidPasswordException{
+		if (users == null) throw new NullPointerException();
 		for (User user : users) {
 			if (user.username.equals(username)) {
 				if (user.password.equals(CredentialsManager.hash(password))) {

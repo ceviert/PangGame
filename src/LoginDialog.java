@@ -1,11 +1,9 @@
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -80,17 +78,29 @@ public class LoginDialog extends JDialog {
 			
 			Object source = event.getSource();
 			
-			if (source == loginButton) {
+			if (source == loginButton || source == usernameField || source == passwordField ) {
 				try {
 					User.login(usernameField.getText(), passwordField.getPassword());
-					LoginSuccessPopup.init();
+					Popup.init(LoginDialog.this, Popup.LOGIN_SUCCESS);
 					dispose();
-				} catch (InvalidUsernameException error) {
+				} catch (NullPointerException | InvalidUsernameException error) {
 					System.out.println(error.getMessage());
-					LoginFailPopup.init(LoginFailPopup.USERNAME_ERROR);
+					Popup.init(LoginDialog.this, Popup.LOGIN_USERNAME_ERROR);
 				} catch (InvalidPasswordException error) {
 					System.out.println(error.getMessage());
-					LoginFailPopup.init(LoginFailPopup.PASSWORD_ERROR);
+					Popup.init(LoginDialog.this, Popup.PASSWORD_ERROR);
+				}
+			}
+			else if (source == registerButton) {
+				try {
+					User.register(usernameField.getText(), passwordField.getPassword());
+					Popup.init(LoginDialog.this, Popup.REGISTER_SUCCESS);
+				} catch (UsernameAlreadyExistsException error) {
+					System.out.println(error.getMessage());
+					Popup.init(LoginDialog.this, Popup.REGISTER_USERNAME_ERROR);
+				} catch (InvalidPasswordException error) {
+					System.out.println(error.getMessage());
+					Popup.init(LoginDialog.this, Popup.PASSWORD_ERROR);
 				}
 			}
 			

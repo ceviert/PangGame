@@ -9,6 +9,7 @@ public class Record {
 		this.time = time;
 	}
 
-	public String toString
-
+	public String toString() {
+		return null;
+	}
 }
