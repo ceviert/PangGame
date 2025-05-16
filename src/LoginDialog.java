@@ -76,12 +76,22 @@ public class LoginDialog extends JDialog {
 	private class LoginHandler implements ActionListener {
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent event) {
 			
-			Object source = e.getSource();
+			Object source = event.getSource();
 			
 			if (source == loginButton) {
-				
+				try {
+					User.login(usernameField.getText(), passwordField.getPassword());
+					LoginSuccessPopup.init();
+					dispose();
+				} catch (InvalidUsernameException error) {
+					System.out.println(error.getMessage());
+					LoginFailPopup.init(LoginFailPopup.USERNAME_ERROR);
+				} catch (InvalidPasswordException error) {
+					System.out.println(error.getMessage());
+					LoginFailPopup.init(LoginFailPopup.PASSWORD_ERROR);
+				}
 			}
 			
 		}

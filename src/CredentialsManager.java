@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -33,10 +34,16 @@ public abstract class CredentialsManager {
 		return users;
 	}
 	
-	public static boolean isPasswordValid(String password) {
-		if (password.contains(" ") || password.length() < 5) return false;
-		return true;
+	public static boolean isPasswordValid(char[] password) {
+	    if (password.length < 5) return false;
+
+	    for (char c : password) {
+	        if (c == ' ') return false;
+	    }
+
+	    return true;
 	}
+
 	
 	public static void saveCredentials() {
 		try {
@@ -53,23 +60,25 @@ public abstract class CredentialsManager {
 	}
 	
 	// Source: "Implementing Secure Password Hashing with SHA-256 in Java."
-	public static String hash(String input) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
+	public static String hash(char[] password) {
+	    try {
+	        MessageDigest md = MessageDigest.getInstance("SHA-256");
 
-            byte[] hashBytes = md.digest(input.getBytes());
+	        byte[] passwordBytes = new String(password).getBytes(StandardCharsets.UTF_8);
 
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hashBytes) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
-            }
+	        byte[] hashBytes = md.digest(passwordBytes);
 
-            return hexString.toString();
+	        StringBuilder hexString = new StringBuilder();
+	        for (byte b : hashBytes) {
+	            String hex = Integer.toHexString(0xff & b);
+	            if (hex.length() == 1) hexString.append('0');
+	            hexString.append(hex);
+	        }
 
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("SHA-256 algorithm not found!", e);
-        }
-    }
+	        return hexString.toString();
+
+	    } catch (NoSuchAlgorithmException e) {
+	        throw new RuntimeException("SHA-256 algorithm not found!", e);
+	    }
+	}
 }
