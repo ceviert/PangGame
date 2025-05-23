@@ -3,6 +3,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -11,14 +13,14 @@ import java.util.Scanner;
 
 public abstract class CredentialsManager {
 
-	private final static String CREDENTIALS_PATH = "data\\usercredentials.txt";
+	private static final Path CREDENTIALS_PATH = Paths.get("data", "usercredentials.txt");
 	private final static String CREDENTIALS_SPLITTER = " ";
 	
 	
 	public static List<User> loadCredentials() throws FileNotFoundException {
 		List<User> users = new ArrayList<>();
 		
-		File file = new File(CREDENTIALS_PATH);
+		File file = CREDENTIALS_PATH.toFile();
 		if (!file.exists()) throw new FileNotFoundException("ERR: file does not exist or invalid file path.");
 		Scanner fileScanner = new Scanner(file);
 		
@@ -47,7 +49,7 @@ public abstract class CredentialsManager {
 	
 	public static void saveCredentials() {
 		try {
-			FileWriter writer = new FileWriter(CREDENTIALS_PATH);
+			FileWriter writer = new FileWriter(CREDENTIALS_PATH.toFile());
 			
 			for (User user : User.users) {
 				writer.write(user.getUsername() + " " + user.getPassword() + "\n");
