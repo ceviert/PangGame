@@ -1,7 +1,7 @@
 import java.awt.Component;
 import javax.swing.JOptionPane;
 
-public class Popup {
+public abstract class Popup {
 
 	public static final int LOGIN_SUCCESS = 0;
 	public static final int LOGIN_USERNAME_ERROR = 1;

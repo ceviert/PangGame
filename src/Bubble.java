@@ -1,15 +1,7 @@
+import java.util.ArrayList;
+
 public class Bubble {
 	
-	private final class velocity {
-		public int y;
-		public int x;
-	}
-	
-	private final class position {
-		public int y;
-		public int x;
-	}
-
 	public static enum SIZE {
 		XL, // 48x40
 		L,  // 33x26
@@ -18,6 +10,27 @@ public class Bubble {
 	}
 	
 	private SIZE size;
-	private velocity velocity;
-	private position position;
+	private Vector velocity;
+	private Vector position;
+	
+	public static ArrayList<Bubble> bubbles;  
+	
+	public Bubble(SIZE size, Vector velocity, Vector position) {
+		this.size = size;
+		this.velocity = velocity;
+		this.position = position;
+	}
+	
+	public void update() {
+		updateVelocity();
+		updatePosition();
+	}
+	
+	private void updatePosition() {
+		position = position.add(velocity);
+	}
+
+	private void updateVelocity() {
+		velocity = velocity.add(GameSettings.GRAVITATIONAL_CONSTANT);
+	}
 }

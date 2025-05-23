@@ -12,7 +12,7 @@ import java.util.Scanner;
 public abstract class CredentialsManager {
 
 	private final static String CREDENTIALS_PATH = "data\\usercredentials.txt";
-	private final static String SPLITTER = " ";
+	private final static String CREDENTIALS_SPLITTER = " ";
 	
 	
 	public static List<User> loadCredentials() throws FileNotFoundException {
@@ -24,7 +24,7 @@ public abstract class CredentialsManager {
 		
 		while (fileScanner.hasNextLine()) {
 			
-			String[] parts = fileScanner.nextLine().split(SPLITTER);
+			String[] parts = fileScanner.nextLine().split(CREDENTIALS_SPLITTER);
 			
 			User user = new User(parts[0], parts[1]);
 			users.add(user);
